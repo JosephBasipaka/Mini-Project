@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sort</title>
+    <script>
+		function toggleDateFields() {
+	    const selectElement = document.getElementById("sortFilter");
+	    const dateFieldsContainer = document.getElementById("dateFieldsContainer");
+	    
+	    // Remove any previously created date fields
+	    while (dateFieldsContainer.firstChild) {
+	        dateFieldsContainer.removeChild(dateFieldsContainer.firstChild);
+	    }
+	    
+	    if (selectElement.value === "filterByDateRange") {
+	        // Create and append the start date input field
+	        const startDateLabel = document.createElement("label");
+	        startDateLabel.textContent = "Start Date:";
+	        const startDateInput = document.createElement("input");
+	        startDateInput.type = "date";
+	        startDateInput.id = "startDate";
+	        startDateInput.name = "startDate";
+	        
+	        dateFieldsContainer.appendChild(startDateLabel);
+	        dateFieldsContainer.appendChild(startDateInput);
+	        
+	        // Create and append the end date input field
+	        const endDateLabel = document.createElement("label");
+	        endDateLabel.textContent = "End Date:";
+	        const endDateInput = document.createElement("input");
+	        endDateInput.type = "date";
+	        endDateInput.id = "endDate";
+	        endDateInput.name = "endDate";
+	        
+	        dateFieldsContainer.appendChild(endDateLabel);
+	        dateFieldsContainer.appendChild(endDateInput);
+    }
+}
+
+	</script>
+</head>
+<body>
+    <h1>Sort</h1>
+
+    <!-- Dropdown menu for sorting and filtering options -->
+    <form th:action="@{/forum}" method="get">
+        <label for="sortFilter">Sort/Filter:</label>
+        <select id="sortFilter" name="sortFilter" onchange="toggleDateFields()">
+            <option value="sortByLikes">Sort by Likes</option>
+            <option value="sortByTimestamp">Sort by Timestamp</option>
+            <option value="filterByDateRange">Filter by Date Range</option>
+        </select>
+        <button type="submit">Apply</button><br>
+		<div id="dateFieldsContainer">Hello</div>
+    </form>
+    <!-- Display the list of posts -->
+    <div>
+        <ul th:if="${posts}">
+            <li th:each="post : ${posts}">
+                Post By : <span th:text="${post.author.name}"></span><br>
+                Content : <span th:text="*{post.content}"></span>
+            </li>
+        </ul>
+        <p th:unless="${posts}">No posts to display.</p>
+    </div>
+</body>
+</html>
