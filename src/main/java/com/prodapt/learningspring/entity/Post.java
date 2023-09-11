@@ -28,6 +28,16 @@ public class Post {
   
   @Column(name = "created_at")
   private Date createdAt;
+  
+  public String image;
+
+public String getImage() {
+	return image;
+}
+
+public void setImage(String image) {
+	this.image = image;
+}
 
 public Date getCreatedAt() {
 	return createdAt;

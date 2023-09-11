@@ -25,7 +25,7 @@
         <ul th:if="${posts}">
             <li th:each="post : ${posts}">
                 <span th:text="${post.author.username}"></span>
-                <span th:text="${post.likes}"></span>
+                <span th:text="${post.likeCount}"></span>
             </li>
         </ul>
         <p th:unless="${posts}">No posts to display.</p>
