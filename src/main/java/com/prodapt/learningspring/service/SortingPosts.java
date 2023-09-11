@@ -1,5 +1,6 @@
 package com.prodapt.learningspring.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,7 +59,7 @@ public class SortingPosts implements IPopularPosts{
 	//Filter posts for a specific number of likes
 	public List<Post> filterPostsByMinLikes(List<Post> posts, int minLikes) {
     return posts.stream()
-            .filter(post -> likeCountRepository.countByPostId(post.getId()) > minLikes)
+            .filter(post -> likeCountRepository.countByPostId(post.getId()) >= minLikes)
             .collect(Collectors.toList());
 	}
 	

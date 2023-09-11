@@ -17,4 +17,11 @@ public interface PostRepository extends JpaRepository<Post, Integer>{
 	
 	List<Post> findByCreatedAtBetween(Date startDate, Date endDate);
 
+//	@Query("SELECT * FROM Post p WHERE p.id = ?1 AND DATE(post.createdAt) = DATE(NOW())")
+//	Post findPostsByCreatedAt(Integer post_id);
+
+	@Query("SELECT p FROM Post p WHERE p.id = :post_id AND date(p.createdAt) BETWEEN :startDate AND :endDate")
+    List<Post> findPostsByCreatedAtAndDateRange(@Param("post_id") Integer post_id,
+                                                @Param("startDate") String startDate,
+                                                @Param("endDate") String endDate);
 }

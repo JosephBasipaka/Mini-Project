@@ -5,13 +5,11 @@
     <script>
 		function toggleDateFields() {
 	    const selectElement = document.getElementById("sortFilter");
-	    const dateFieldsContainer = document.getElementById("dateFieldsContainer");
-	    
-	    // Remove any previously created date fields
-	    while (dateFieldsContainer.firstChild) {
+	    const dateFieldsContainer = document.getElementById("dateFieldsContainer")
+	     const minLikesContainer = document.getElementById("minLikesContainer");
+while (dateFieldsContainer.firstChild) {
 	        dateFieldsContainer.removeChild(dateFieldsContainer.firstChild);
 	    }
-	    
 	    if (selectElement.value === "filterByDateRange") {
 	        // Create and append the start date input field
 	        const startDateLabel = document.createElement("label");
@@ -20,10 +18,8 @@
 	        startDateInput.type = "date";
 	        startDateInput.id = "startDate";
 	        startDateInput.name = "startDate";
-	        
 	        dateFieldsContainer.appendChild(startDateLabel);
 	        dateFieldsContainer.appendChild(startDateInput);
-	        
 	        // Create and append the end date input field
 	        const endDateLabel = document.createElement("label");
 	        endDateLabel.textContent = "End Date:";
@@ -31,10 +27,16 @@
 	        endDateInput.type = "date";
 	        endDateInput.id = "endDate";
 	        endDateInput.name = "endDate";
-	        
 	        dateFieldsContainer.appendChild(endDateLabel);
 	        dateFieldsContainer.appendChild(endDateInput);
     }
+	else if (selectElement.value === "filterByMinLikes") {
+            // Show the Min Likes input field
+            minLikesContainer.style.display = "block";
+        } else {
+            // Hide the Min Likes input field for other options
+            minLikesContainer.style.display = "none";
+        }
 }
 
 	</script>
@@ -46,20 +48,29 @@
     <form th:action="@{/forum}" method="get">
         <label for="sortFilter">Sort/Filter:</label>
         <select id="sortFilter" name="sortFilter" onchange="toggleDateFields()">
+			<option >Select</option>
             <option value="sortByLikes">Sort by Likes</option>
             <option value="sortByTimestamp">Sort by Timestamp</option>
             <option value="filterByDateRange">Filter by Date Range</option>
+	    <option value="filterByMinLikes">Filter by Min Likes</option>
         </select>
+	<div id="minLikesContainer" style="display: none;">
+        <label for="minLikes">Min Likes:</label>
+        <input type="number" id="minLikes" name="minLikes">
+    </div>
         <button type="submit">Apply</button><br>
-		<div id="dateFieldsContainer">Hello</div>
+		<div id="dateFieldsContainer"></div>
+		
     </form>
     <!-- Display the list of posts -->
     <div>
         <ul th:if="${posts}">
-            <li th:each="post : ${posts}">
+            <li th:each="post,iter : ${posts}">
                 Post By : <span th:text="${post.author.name}"></span><br>
-                Content : <span th:text="*{post.content}"></span>
-            </li>
+                Content : <span th:text="*{post.content}"></span><br>
+                Likes : <span th:text="${likeCount.get(__${iter.index}__)}"></span><br>
+                TimeStamp : <span th:text="${post.createdAt}"></span>
+</span>            </li>
         </ul>
         <p th:unless="${posts}">No posts to display.</p>
     </div>
