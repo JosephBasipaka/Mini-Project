@@ -66,6 +66,11 @@
                     <option value="filterByDateRange">Filter by Date Range</option>
                     <option value="filterByMinLikes">Filter by Min Likes</option>
                 </select>
+		<div style="max-width: 400px; margin-left: 370px; text-align: center; margin-top: 10px;">
+        <span th:if="${sortFilter != null || sortFilter != ''}">
+            <p class="alert alert-info" th:text="'Sorted in ' + ${currentSortOrder} + ' order'"></p>
+        </span>
+    </div>
             </div>
             <div id="minLikesContainer" class="form-group" style="display: none; margin-left: 370px; margin-bottom: 10px;">
                 <label for="minLikes" style="font-weight: bold;">Min Likes:</label>
@@ -78,6 +83,10 @@
 	        <input type="hidden" name="refresh" value="refreshClicked">
 	        <input type="submit" value="Refresh" class="btn btn-danger" style="margin-left: 545px;">
 	    </form>
+	<div style="max-width: 400px; margin-left: 370px; text-align: center; margin-top: 10px;">
+        <p th:if="${filterByDateRange}" class="alert alert-info" th:text="'Filtered by Date Range: ' + ${startDate} + ' to ' + ${endDate}"></p>
+        <p th:if="${filterByMinLikes}" class="alert alert-info" th:text="'Filtered by Min Likes: ' + ${minLikes}"></p>
+    </div>
 
         <!-- Display the list of posts -->
         <div style="max-width: 400px; margin-left: 370px; text-align: center; margin-top: 10px;" >

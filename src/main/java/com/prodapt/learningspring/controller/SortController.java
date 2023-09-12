@@ -33,7 +33,7 @@ public class SortController {
     @Autowired
     private SortingPosts postService;
 	
-	private String currentSortOrder = "asc"; 
+	private String currentSortOrder = ""; 
 
     private List<Post> cachedPosts = null;
 	@GetMapping("/forum")
@@ -45,6 +45,7 @@ public class SortController {
 	boolean refreshCache = "refreshClicked".equals(request.getParameter("refresh"));
     if (cachedPosts == null || refreshCache) {
         cachedPosts = (List<Post>) postRepository.findAll();
+        currentSortOrder = "";
     }
 
     if ("filterByDateRange".equals(sortFilter) && startDateStr != null && endDateStr != null) {
@@ -53,6 +54,9 @@ public class SortController {
             Date startDate = dateFormat.parse(startDateStr);
             Date endDate = dateFormat.parse(endDateStr);
             cachedPosts = postService.filterPostsByDateRange(cachedPosts, startDate, endDate);
+		model.addAttribute("filterByDateRange", true);
+            model.addAttribute("startDate", startDateStr);
+            model.addAttribute("endDate", endDateStr);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -60,6 +64,8 @@ public class SortController {
 
     if ("filterByMinLikes".equals(sortFilter) && minLikes != null) {
         cachedPosts = postService.filterPostsByMinLikes(cachedPosts, minLikes);
+	model.addAttribute("filterByMinLikes", true);
+        model.addAttribute("minLikes", minLikes);
     }
 
 //    if ("sortByLikes".equals(sortFilter)) {
@@ -68,10 +74,10 @@ public class SortController {
 //        cachedPosts = postService.sortPostsByTimestamp(cachedPosts);
 //    }
 	if ("sortByLikes".equals(sortFilter)) {
-            toggleSortingOrder(); // Toggle the sorting order
+            toggleSortingOrder(); 
             cachedPosts = postService.sortPostsByLikes(cachedPosts, currentSortOrder);
         } else if ("sortByTimestamp".equals(sortFilter)) {
-            toggleSortingOrder(); // Toggle the sorting order
+            toggleSortingOrder(); 
             cachedPosts = postService.sortPostsByTimestamp(cachedPosts, currentSortOrder);
         }
     List<Integer> likeList = new ArrayList<>();
@@ -82,6 +88,7 @@ public class SortController {
 
     model.addAttribute("likeCount", likeList);
     model.addAttribute("posts", cachedPosts);
+    model.addAttribute("currentSortOrder", currentSortOrder);
     return "SortedPosts";
 }
 private void toggleSortingOrder() {
