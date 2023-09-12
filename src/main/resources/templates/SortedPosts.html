@@ -7,47 +7,47 @@
 
     <script>
        function toggleDateFields() {
-    const selectElement = document.getElementById("sortFilter");
-    const dateFieldsContainer = document.getElementById("dateFieldsContainer");
-    const minLikesContainer = document.getElementById("minLikesContainer");
-
-    while (dateFieldsContainer.firstChild) {
-        dateFieldsContainer.removeChild(dateFieldsContainer.firstChild);
-    }
-
-    if (selectElement.value === "filterByDateRange") {
-        // Create and append the start date input field
-        const startDateLabel = document.createElement("label");
-        startDateLabel.textContent = "Start Date:";
-        const startDateInput = document.createElement("input");
-        startDateInput.type = "date";
-        startDateInput.id = "startDate";
-        startDateInput.name = "startDate";
-        dateFieldsContainer.appendChild(startDateLabel);
-        dateFieldsContainer.appendChild(startDateInput);
-
-        // Create and append the end date input field
-        const endDateLabel = document.createElement("label");
-        endDateLabel.textContent = "End Date:";
-        const endDateInput = document.createElement("input");
-        endDateInput.type = "date";
-        endDateInput.id = "endDate";
-        endDateInput.name = "endDate";
-        dateFieldsContainer.appendChild(endDateLabel);
-        dateFieldsContainer.appendChild(endDateInput);
-        
-        // Show the dateFieldsContainer
-        dateFieldsContainer.style.display = "block";
-        minLikesContainer.style.display = "none"; // Hide minLikesContainer
-    } else if (selectElement.value === "filterByMinLikes") {
-        // Show the minLikesContainer
-        minLikesContainer.style.display = "block";
-        dateFieldsContainer.style.display = "none"; // Hide dateFieldsContainer
-    } else {
-        // Hide both containers for other options
-        dateFieldsContainer.style.display = "none";
-        minLikesContainer.style.display = "none";
-    }
+	    const selectElement = document.getElementById("sortFilter");
+	    const dateFieldsContainer = document.getElementById("dateFieldsContainer");
+	    const minLikesContainer = document.getElementById("minLikesContainer");
+	
+	    while (dateFieldsContainer.firstChild) {
+	        dateFieldsContainer.removeChild(dateFieldsContainer.firstChild);
+	    }
+	
+	    if (selectElement.value === "filterByDateRange") {
+	        // Create and append the start date input field
+	        const startDateLabel = document.createElement("label");
+	        startDateLabel.textContent = "Start Date:";
+	        const startDateInput = document.createElement("input");
+	        startDateInput.type = "date";
+	        startDateInput.id = "startDate";
+	        startDateInput.name = "startDate";
+	        dateFieldsContainer.appendChild(startDateLabel);
+	        dateFieldsContainer.appendChild(startDateInput);
+	
+	        // Create and append the end date input field
+	        const endDateLabel = document.createElement("label");
+	        endDateLabel.textContent = "End Date:";
+	        const endDateInput = document.createElement("input");
+	        endDateInput.type = "date";
+	        endDateInput.id = "endDate";
+	        endDateInput.name = "endDate";
+	        dateFieldsContainer.appendChild(endDateLabel);
+	        dateFieldsContainer.appendChild(endDateInput);
+	        
+	        // Show the dateFieldsContainer
+	        dateFieldsContainer.style.display = "block";
+	        minLikesContainer.style.display = "none"; // Hide minLikesContainer
+	    } else if (selectElement.value === "filterByMinLikes") {
+	        // Show the minLikesContainer
+	        minLikesContainer.style.display = "block";
+	        dateFieldsContainer.style.display = "none"; // Hide dateFieldsContainer
+	    } else {
+	        // Hide both containers for other options
+	        dateFieldsContainer.style.display = "none";
+	        minLikesContainer.style.display = "none";
+	    }
 }
 
     </script>
@@ -55,7 +55,6 @@
 <body>
     <div class="container">
         <h1 style="text-align: center;">Sorting and Filtering</h1>
-
         <!-- Dropdown menu for sorting and filtering options -->
         <form th:action="@{/forum}" method="get">
             <div class="form-group">
@@ -73,8 +72,12 @@
                 <input type="number" id="minLikes" name="minLikes" class="form-control" style="width: 400px;">
             </div>
             <div id="dateFieldsContainer" style="margin-left: 370px; margin-bottom: 10px;"></div>
-            <button type="submit" class="btn btn-primary" style="margin-left: 550px;">Apply</button>
+            <button type="submit" class="btn btn-primary" style="margin-left: 550px; margin-bottom: 10px;">Apply</button>
         </form>
+		<form method="get" action="/forum">
+	        <input type="hidden" name="refresh" value="refreshClicked">
+	        <input type="submit" value="Refresh" class="btn btn-danger" style="margin-left: 545px;">
+	    </form>
 
         <!-- Display the list of posts -->
         <div style="max-width: 400px; margin-left: 370px; text-align: center; margin-top: 10px;" >
@@ -82,11 +85,11 @@
 				<li th:each="post,iter : ${posts}" class="list-group-item" style="border: 1px solid #000;">
 				<div style="max-width: 600px">
 			    <span style="font-weight: bold;">Post By:</span> <span th:text="${post.author.name}"></span><br>
-			    <span style="font-weight: bold;">Content:</span> <span th:text="*{post.content}"></span><br>
 			    <img th:attr="src=@{${post.image}}" alt="Scenery" class="img-fluid" width="370" height="370">
 			    <br>
+			    <span style="font-weight: bold;">Content:</span> <span th:text="*{post.content}"></span><br>
 			    <span style="font-weight: bold;">Likes:</span> <span th:text="${likeCount.get(__${iter.index}__)}"></span><br>
-			    <span style="font-weight: bold;">Timestamp:</span> <span th:text="${post.createdAt}"></span>
+			    <span style="font-weight: bold;">Created At:</span> <span th:text="${post.createdAt}"></span>
 				</div>
 			</li>
 

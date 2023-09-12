@@ -56,6 +56,41 @@ public class SortingPosts implements IPopularPosts{
             .collect(Collectors.toList());
 	}
 
+	public List<Post> sortPostsByLikes(List<Post> posts, String sortOrder) {
+    return posts.stream()
+            .sorted((post1, post2) -> {
+                Integer likeCount1 = likeCountRepository.countByPostId(post1.getId());
+                Integer likeCount2 = likeCountRepository.countByPostId(post2.getId());
+                int comparisonResult = likeCount2.compareTo(likeCount1);
+
+                // Apply sorting order
+                if ("desc".equals(sortOrder)) {
+                    return comparisonResult; // Descending order
+                } else {
+                    return -comparisonResult; // Ascending order (invert comparison result)
+                }
+            })
+            .collect(Collectors.toList());
+}
+
+public List<Post> sortPostsByTimestamp(List<Post> posts, String sortOrder) {
+    return posts.stream()
+            .sorted((post1, post2) -> {
+                Long timestamp1 = postRepository.sortPostsByCreatedAt(post1.getId());
+                Long timestamp2 = postRepository.sortPostsByCreatedAt(post2.getId());
+                int comparisonResult = Long.compare(timestamp1, timestamp2);
+
+                // Apply sorting order
+                if ("desc".equals(sortOrder)) {
+                    return comparisonResult; // Descending order
+                } else {
+                    return -comparisonResult; // Ascending order (invert comparison result)
+                }
+            })
+            .collect(Collectors.toList());
+}
+
+
 	//Filter posts for a specific number of likes
 	public List<Post> filterPostsByMinLikes(List<Post> posts, int minLikes) {
     return posts.stream()
